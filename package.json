@@ -1,0 +1,9 @@
+{
+  "name": "flac-sort",
+  "version": "0.0.1",
+  "main": "sort.js",
+  "dependencies": {
+    "metaflac-js": "^1.0.5",
+    "ramda": "^0.27.1"
+  }
+}
