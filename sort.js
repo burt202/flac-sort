@@ -12,7 +12,8 @@ const allFiles = fs.readdirSync(directoryPath)
 
 const files = allFiles.filter((path) => {
   const artist = path.split(" - ")[0]
-  const extension = path.split(".")[1]
+  const parts = path.split(".")
+  const extension = parts[parts.length -1]
 
   if (extension !== "flac") {
     return false
