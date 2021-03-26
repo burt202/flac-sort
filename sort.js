@@ -12,6 +12,11 @@ const allFiles = fs.readdirSync(directoryPath)
 
 const files = allFiles.filter((path) => {
   const artist = path.split(" - ")[0]
+  const extension = path.split(".")[1]
+
+  if (extension !== "flac") {
+    return false
+  }
 
   if (IGNORE_LIST.includes(artist)) {
     return false
@@ -70,7 +75,7 @@ const withTags = filesForArtist.map((path) => {
     path,
     title: getTagValue(flac, "title") || getTagValue(flac, "Title") || getTagValue(flac, "TITLE"),
     album: getTagValue(flac, "album") || getTagValue(flac, "Album") || getTagValue(flac, "ALBUM"),
-    trackNo: getTagValue(flac, "TRACKNUMBER"),
+    trackNo: getTagValue(flac, "TRACKNUMBER") || getTagValue(flac, "tracknumber"),
   }
 })
 
@@ -99,13 +104,13 @@ if (!fs.existsSync(artistPath)) {
 }
 
 completeAlbums.forEach((albumName) => {
-  const albumPath = artistPath + "/" + albumName
+  const albumPath = artistPath + "/" + albumName.replace(/\//g, ",")
   fs.mkdirSync(albumPath)
 
   const album = groupedByAlbum[albumName]
 
   album.forEach((file) => {
-    const title = file.title.replace(/\//g, ",");
+    const title = file.title.replace(/\//g, ",")
     const newPath = `${file.trackNo} - ${title}.flac`
     fs.renameSync(directoryPath + "/" + file.path, albumPath + "/" + newPath)
     console.log(`Moved '${file.path}' to ${albumPath}`)
